@@ -1,0 +1,29 @@
+{
+    "sites": {
+        "ESPN": {
+            "url": "https://www.espn.com",
+            "link-selector": "section[class='col-three']>div[class='headlineStack top-headlines']>section>ul>li>a",
+            "title-selector": ""
+        },
+        "CBSSPORTS": {
+            "url": "https://www.cbssports.com",
+            "link-selector": "div[class='top-marquee-wrap'] a",
+            "title-selector" : "*[class='image-icon-title'], *[class='article-list-stack-item-title']"
+        },
+        "YAHOOSPORTS": {
+            "url": "https://sports.yahoo.com",
+            "link-selector": "div[class='_ys_1kwrscm _ys_lab156'] a",
+            "title-selector" : "*[class='_ys_r53v8z _ys_1whess3 _ys_re0ei2'], *[class='_ys_r53v8z _ys_1whess3 _ys_oukyxe'], *[class='_ys_r53v8z _ys_1xjsazm _ys_1o2qc74 _ys_1whess3']"
+        },
+        "APNEWS": {
+            "url": "https://apnews.com/sports",
+            "link-selector": "h2[class='PagePromo-title'] a[class='Link'], h3[class='PagePromo-title'] a[class='Link']",
+            "title-selector" : ""
+        },
+        "CNNSPORTS": {
+            "url": "https://www.cnn.com/sport",
+            "link-selector": "a[data-link-type='article']",
+            "title-selector" : "span[data-editable='headline']"
+        }
+    }
+}

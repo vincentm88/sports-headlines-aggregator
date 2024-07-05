@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sports News Aggregator</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Sports News Aggregator</h1>
+        <ul class="list-group">
+            {% for article in articles %}
+            <li class="list-group-item">
+                <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</body>
+</html>
