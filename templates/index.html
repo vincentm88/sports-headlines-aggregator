@@ -2,18 +2,110 @@
 <html>
 <head>
     <title>Sports News Aggregator</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <h1>Sports News Aggregator</h1>
-        <ul class="list-group">
-            {% for article in articles %}
-            <li class="list-group-item">
-                <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-            </li>
-            {% endfor %}
-        </ul>
+    <div class="container text-center">
+        <h1 class="mb-3">Sports News Aggregator</h1>
+
+        <div id="articleList" class="row"></div>
+        <button id="loadMore" class="btn btn-primary btn-block my-3 mx-auto">Load More</button>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const articles = {{ articles|tojson }};
+                let currentIndex = 0;
+                const itemsPerPage = 50;
+
+                function loadArticles(startIndex, count) {
+                    const endIndex = startIndex + count;
+                    const articlesToLoad = articles.slice(startIndex, endIndex);
+
+                    articlesToLoad.forEach((article, index) => {
+                        const col = document.createElement('div');
+                        col.className = 'col-12 mb-4';
+                        
+                        const card = document.createElement('div');
+                        card.className = 'card mb-3 mx-auto text-start';
+                        card.style.maxWidth = '540px';
+                        card.onclick = () => window.open(article.link, '_blank');
+
+                        const row = document.createElement('div');
+                        row.className = 'row g-0';
+
+                        const colImg = document.createElement('div');
+                        colImg.className = 'col-md-4';
+
+                        const img = document.createElement('img');
+                        img.id = `image_${startIndex + index}`;
+                        img.className = 'img-fluid rounded-start';
+                        img.alt = article.title;
+                        img.style.display = 'none';
+
+                        const colBody = document.createElement('div');
+                        colBody.className = 'col-md-8';
+
+                        const cardBody = document.createElement('div');
+                        cardBody.className = 'card-body';
+
+                        const title = document.createElement('h5');
+                        title.className = 'card-title';
+                        title.textContent = article.title;
+
+                        const description = document.createElement('p');
+                        description.id = `description_${startIndex + index}`;
+                        description.className = 'card-text';
+                        description.textContent = 'Loading description...';
+
+                        cardBody.appendChild(title);
+                        cardBody.appendChild(description);
+                        colBody.appendChild(cardBody);
+                        colImg.appendChild(img);
+                        row.appendChild(colImg);
+                        row.appendChild(colBody);
+                        card.appendChild(row);
+                        col.appendChild(card);
+                        document.getElementById('articleList').appendChild(col);
+
+                        axios.get(`/metadata/${startIndex + index}`)
+                            .then(response => {
+                                const data = response.data;
+                                const descriptionElem = document.getElementById(`description_${startIndex + index}`);
+                                const imageElem = document.getElementById(`image_${startIndex + index}`);
+
+                                if (data.description) {
+                                    descriptionElem.textContent = data.description;
+                                } else {
+                                    descriptionElem.textContent = "No description available.";
+                                }
+
+                                if (data.image) {
+                                    imageElem.src = data.image;
+                                    imageElem.style.display = 'block';
+                                } else {
+                                    imageElem.style.display = 'none';
+                                }
+                            })
+                            .catch(error => {
+                                console.error(`Error fetching metadata for article ${startIndex + index}:`, error);
+                            });
+                    });
+
+                    currentIndex = endIndex;
+                    if (currentIndex >= articles.length) {
+                        document.getElementById('loadMore').style.display = 'none';
+                    }
+                }
+
+                document.getElementById('loadMore').addEventListener('click', function () {
+                    loadArticles(currentIndex, itemsPerPage);
+                });
+
+                // Initial load
+                loadArticles(currentIndex, itemsPerPage);
+            });
+        </script>
     </div>
 </body>
 </html>
