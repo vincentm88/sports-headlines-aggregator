@@ -3,7 +3,7 @@
 <head>
     <title>Sports News Aggregator</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" nonce="{{ nonce }}"></script>
     <style>
         .card:hover {
           transform: translateY(-10px);
@@ -22,7 +22,7 @@
         <div id="articleList" class="row"></div>
         <button id="loadMore" class="btn btn-primary btn-block my-3 mx-auto">Load More</button>
 
-        <script>
+        <script nonce="{{ nonce }}">
             document.addEventListener('DOMContentLoaded', function () {
                 const articles = {{ articles|tojson }};
                 let currentIndex = 0;
@@ -78,7 +78,7 @@
                         col.appendChild(card);
                         document.getElementById('articleList').appendChild(col);
 
-                        axios.get(`/metadata/${startIndex + index}`)
+                        axios.get(`/article/${startIndex + index}`)
                             .then(response => {
                                 const data = response.data;
                                 const descriptionElem = document.getElementById(`description_${startIndex + index}`);

@@ -31,7 +31,7 @@ def fetch_open_graph_metadata(url):
             metadata['image'] = metadata['image'].get('content') if metadata['image'] else ''
             return metadata
         else:
-            print(f"Failed to fetch metadata from {url}")
+            print(f"Failed to fetch metadata from {url} with status code {response.status_code} and content {response.content}")
             return None
     except Exception as e:
         print(f"Error fetching metadata from {url}: {e}")
